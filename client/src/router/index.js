@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Posts from '@/components/Posts'
 import addpost from '@/components/AddPost'
 import editpost from '@/components/EditPost'
+// import Login from '@/components/Login'
 
 Vue.use(Router)
 
@@ -11,6 +12,11 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'Posts',
+      component: Posts
+    },
+    {
+      path: '/posts',
       name: 'Posts',
       component: Posts
     },

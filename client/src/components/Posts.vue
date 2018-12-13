@@ -1,19 +1,26 @@
 <template>
   <div class="posts">
-    <h1>Posts</h1>
+    <h1>드론 책 반납 서비스</h1>
     <div v-if="posts.length > 0" class="table-wrap">
       <div>
-        <router-link v-bind:to="{ name: 'addpost' }" class="">Add Post</router-link>
+        <router-link v-bind:to="{ name: 'addpost' }" class=""><h2>예약 추가</h2></router-link>
+      </div>
+      <div>
+        <img src="http://dimg.donga.com/egc/CDB/WEEKLY/Article/14/94/83/53/1494835371410.jpg" width="150">
       </div>
       <table>
         <tr>
-          <td>Title</td>
-          <td width="550">Description</td>
-          <td width="100" align="center">Action</td>
+          <td width="200">예약자</td>
+          <td width="400">반납할 책 목록</td>
+          <td width="200">예약 일시</td>
+          <td width="200">반납 장소</td>
+          <td width="150" align="center">Action</td>
         </tr>
         <tr v-for="post in posts">
           <td>{{ post.title }}</td>
           <td>{{ post.description }}</td>
+          <td>{{ post.date }}</td>
+          <td>{{ post.lat }},{{ post.lng }}</td>
           <td align="center">
             <router-link v-bind:to="{ name: 'editpost', params: { id: post._id } }">Edit</router-link> |
             <a href="#" @click="deletePost(post._id)">Delete</a>
@@ -22,8 +29,8 @@
       </table>
     </div>
     <div v-else>
-      There are no posts.. Lets add one now <br /><br />
-      <router-link v-bind:to="{ name: 'addpost' }" class="add_post_link">Add Post</router-link>
+      예약내역이 없습니다 <br /><br />
+      <router-link v-bind:to="{ name: 'addpost' }" class="add_post_link">예약추가</router-link>
     </div>
   </div>
 </template>
@@ -51,12 +58,12 @@ export default {
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
         type: 'warning',
-        showCancelButton: true,
+        showCancelButton: false,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
-      }).then(function () {
-        PostsService.deletePost(id)
+      }).then(async function () {
+        await PostsService.deletePost(id)
         $this.$router.go({
           path: '/'
         })

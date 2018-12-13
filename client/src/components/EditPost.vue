@@ -1,12 +1,18 @@
 <template>
   <div class="posts">
-    <h1>Edit Post</h1>
+    <h1>예약 수정</h1>
       <div class="form">
         <div>
-          <input type="text" name="title" placeholder="TITLE" v-model="title">
+          <input type="text" name="title" placeholder="예약자" v-model="title">
         </div>
         <div>
-          <textarea rows="15" cols="15" placeholder="DESCRIPTION" v-model="description"></textarea>
+          <textarea rows="15" cols="15" placeholder="반납할 책" v-model="description"></textarea>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            현재 예약 한 시간 : {{date}}
+            <date-picker v-model="date" placeholder="변경할 날짜를 선택하세요"></date-picker>
+          </div>
         </div>
         <div>
           <button class="app_post_btn" @click="updatePost">Update</button>
@@ -17,16 +23,28 @@
 
 <script>
 import PostsService from '@/services/PostsService'
+import datePicker from 'vue-bootstrap-datetimepicker'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css'
+
 export default {
   name: 'editpost',
   data () {
     return {
       title: '',
-      description: ''
+      description: '',
+      date: '',
+      options: {
+        format: 'DD/MM/YYYY',
+        useCurrent: false
+      }
     }
   },
   mounted () {
     this.getPost()
+  },
+  components: {
+    datePicker
   },
   methods: {
     async getPost () {
@@ -35,13 +53,15 @@ export default {
       })
       this.title = response.data.title
       this.description = response.data.description
+      this.date = response.data.date
       // this.$router.push({ name: 'Posts' })
     },
     async updatePost () {
       await PostsService.updatePost({
         id: this.$route.params.id,
         title: this.title,
-        description: this.description
+        description: this.description,
+        date: this.date
       })
       this.$swal(
         'Great!',
